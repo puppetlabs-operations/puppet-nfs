@@ -12,7 +12,7 @@ class nfs::server::redhat(
 
 
 class nfs::server::redhat::install {
-  ensure_resource( 'package', 'nfs4-acl-tools',   { 'ensure' => 'installed' } )
+  ensure_resource( 'package', 'nfs4-acl-tools', { 'ensure' => 'installed' } )
 }
 
 
@@ -28,7 +28,7 @@ class nfs::server::redhat::service {
         enable     => true,
         hasrestart => true,
         hasstatus  => true,
-        require    => Package["nfs-utils"],
+        require    => Package['nfs-utils'],
         subscribe  => [ Concat['/etc/exports'], Augeas['/etc/idmapd.conf'] ],
       }
     } else {
@@ -37,8 +37,8 @@ class nfs::server::redhat::service {
         enable     => true,
         hasrestart => true,
         hasstatus  => true,
-        require    => Package["nfs-utils"],
+        require    => Package['nfs-utils'],
         subscribe  => Concat['/etc/exports'],
-     }
+    }
   }
 }
