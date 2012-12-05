@@ -13,10 +13,7 @@ define nfs::server::export (
   $bindmount = undef,
   $tag = undef,
 ) {
-
-
   if $nfs::server::nfs_v4 {
-
     nfs::server::export::nfs_v4::bindmount {
     "${name}":
       ensure         => $ensure,
@@ -42,14 +39,11 @@ define nfs::server::export (
       share     => "${v4_export_name}",
       server    => "${::clientcert}",
     }
-
-    } else {
-
+  } else {
     nfs::server::export::configure{
       "${v3_export_name}":
         ensure  => $ensure,
         clients => $clients,
-
     }
 
     @@nfs::client::mount {"shared ${v3_export_name} by ${::clientcert}":
@@ -69,7 +63,6 @@ define nfs::server::export::configure (
   $ensure = 'present',
   $clients,
 ) {
-
   if $ensure != 'absent' {
     $line = "${name} ${clients}\n"
 
@@ -86,7 +79,6 @@ define nfs::server::export::nfs_v4::bindmount (
   $bind = $bind,
   $v4_export_name,
 ) {
-
   $expdir = "${nfs::server::nfs_v4_export_root}/${v4_export_name}"
 
   nfs::mkdir{"${expdir}": }
@@ -100,6 +92,5 @@ define nfs::server::export::nfs_v4::bindmount (
       options => $bind,
       require => Nfs::Mkdir["${expdir}"],
   }
-
 }
 
