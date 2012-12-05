@@ -51,7 +51,7 @@ define nfs::server::export (
       mount           => $mount,
       remounts        => $remounts,
       atboot          => $atboot,
-      options         =>  $options,
+      options         => $options,
       tag             => $tag,
       share           => "${v3_export_name}",
       server          => "${::clientcert}",
