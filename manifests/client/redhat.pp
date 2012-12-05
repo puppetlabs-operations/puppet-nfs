@@ -51,11 +51,16 @@ class nfs::client::redhat::service {
     require => Class['nfs::client::redhat::configure']
   }
 
-  service {"nfslock":
-    ensure     => running,
+  $service_name_nfslock = $operatingsystem ? {
+    fedora  => 'nfs-lock',
+    default => 'nfslock',
+  }
+
+  service { $service_name_nfslock:
+    ensure    => running,
     enable    => true,
     hasstatus => true,
-    require => $nfs::client::redhat::osmajor ? {
+    require   => $nfs::client::redhat::osmajor ? {
       6 => Service["rpcbind"],
       5 => [Package["portmap"], Package["nfs-utils"]]
     },
