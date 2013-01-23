@@ -47,24 +47,19 @@ class nfs::client::debian::service {
     require => Class['nfs::client::debian::configure']
   }
 
-  service { 'portmap':
-    ensure    => running,
-    enable    => true,
-    hasstatus => false,
-  }
-
   # On debian squeeze there isn't a separate idmapd, it lives inside of
   # nfs-common, but we can't do that. I may effectively be breaking v4
   # support, but I'd just prefer it all to work first.
-  if $lsbdistcodename != 'squeeze' {
+  if $lsbdistcodename != ( 'squeeze' or 'wheezy' ) {
     if $nfs::client::debian::nfs_v4 {
       service { 'idmapd':
         ensure => running,
         subscribe => Augeas['/etc/idmapd.conf', '/etc/default/nfs-common'],
       }
-    } else {
-      service { 'idmapd':
-        ensure => stopped,
+      service { 'portmap':
+        ensure    => running,
+        enable    => true,
+        hasstatus => false,
       }
     }
   }
