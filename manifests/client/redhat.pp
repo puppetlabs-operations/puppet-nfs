@@ -63,13 +63,13 @@ class nfs::client::redhat::service {
     },
   }
 
-  service { 'netfs':
-    enable  => true,
-    require => $nfs::client::redhat::osmajor ? {
-      6 => Service[$service_name_nfslock],
-      5 => [ Service['portmap'], Service[$service_name_nfslock] ],
-    },
-  }
+# service { 'netfs':
+#   enable  => true,
+#   require => $nfs::client::redhat::osmajor ? {
+#     6 => Service[$service_name_nfslock],
+#     5 => [ Service['portmap'], Service[$service_name_nfslock] ],
+#   },
+# }
 
   if $nfs::client::redhat::osmajor == 6 {
     service { 'rpcbind':
