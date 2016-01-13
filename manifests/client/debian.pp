@@ -1,6 +1,7 @@
 class nfs::client::debian (
   $nfs_v4 = false,
   $nfs_v4_idmap_domain = undef,
+  $manage_rpcbind = true,
 ) {
   include nfs::client::debian::install
   include nfs::client::debian::configure
@@ -9,12 +10,14 @@ class nfs::client::debian (
 
 
 class nfs::client::debian::install {
-  case $::lsbdistcodename {
-    'lucid': {
-      ensure_resource( 'package', 'portmap',    { 'ensure' => 'installed' } )
-    }
-    default: {
-      ensure_resource( 'package', 'rpcbind',    { 'ensure' => 'installed' } )
+  if $manage_rpcbind {
+    case $::lsbdistcodename {
+      'lucid': {
+        ensure_resource( 'package', 'portmap',    { 'ensure' => 'installed' } )
+      }
+      default: {
+        ensure_resource( 'package', 'rpcbind',    { 'ensure' => 'installed' } )
+      }
     }
   }
   ensure_resource( 'package', 'nfs-common',     { 'ensure' => 'installed' } )
